@@ -155,7 +155,7 @@ class TestAdminCMD(TestCase):
         main('searchsync', '--objects-per-page', '4', '--threads', '1')
         resp = requests.get('http://localhost:9200/pacifica_search/_stats')
         self.assertEqual(resp.status_code, 200)
-        self.assertEqual(resp.json()['indices']['pacifica_search']['primaries']['docs']['count'], 60)
+        self.assertEqual(resp.json()['indices']['pacifica_search']['primaries']['docs']['count'], 45)
         resp = requests.get('http://localhost:9200/pacifica_search/doc/transactions_67')
         self.assertEqual(resp.status_code, 200)
         validate(resp.json(), schema=self.es_schema)

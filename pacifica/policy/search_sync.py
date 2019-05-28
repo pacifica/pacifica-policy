@@ -12,8 +12,8 @@ except ImportError:  # pragma: no cover
 from math import ceil
 from datetime import datetime
 import requests
+from elasticsearch import Elasticsearch, ElasticsearchException, helpers
 from six import text_type
-from elasticsearch import Elasticsearch, helpers, ElasticsearchException
 from .config import get_config
 from .root import Root
 from .search_render import ELASTIC_INDEX, SearchRender
@@ -87,7 +87,6 @@ def es_client():
                         'type': 'keyword'
                     },
                     'submitter': {
-                        'type': 'nested',
                         'properties': {
                             'keyword': {
                                 'type': 'keyword'
@@ -95,7 +94,6 @@ def es_client():
                         }
                     },
                     'authorized_releaser': {
-                        'type': 'nested',
                         'properties': {
                             'keyword': {
                                 'type': 'keyword'
