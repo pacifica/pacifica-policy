@@ -8,7 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints for status
 - Endpoints for reporting
 
+## [0.6.6] - 2019-05-30
+### Changed
+- Add field data flag to the has doi metadata attribute by [@plithnar](https://github.com/plithnar)
+
 ## [0.6.5] - 2019-05-23
+### Changed
 - Fix #84 make the elasticsearch endpoint not constant
 - Fix #85 verify event policy is of type ingest
 
