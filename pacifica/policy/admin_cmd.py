@@ -41,12 +41,12 @@ def datarel_options(datarel_parser):
     )
     datarel_parser.add_argument(
         '--time-after', dest='time_after', type=objstr_to_timedelta,
-        help='set suspense date on data to X days after keyword.',
+        help='set suspense date on data to X days after keyword (i.e. --time-after="7 days after").',
         required=False, default=timedelta(days=36500)
     )
     datarel_parser.add_argument(
         '--time-ago', dest='time_ago', type=objstr_to_timedelta,
-        help='only objects updated after X days ago.',
+        help='only objects updated after X days ago (i.e. --time-ago="7 days ago").',
         required=False, default=timedelta(days=3650)
     )
     datarel_parser.set_defaults(func=data_release)
@@ -80,8 +80,8 @@ def searchsync_options(searchsync_parser):
     )
     searchsync_parser.add_argument(
         '--time-ago', dest='time_ago', type=objstr_to_timedelta,
-        help='only objects newer than X days ago.', required=False,
-        default=timedelta(days=36500)
+        help='only objects newer than X days ago (i.e. --time-ago="7 days ago").',
+        required=False, default=timedelta(days=36500)
     )
     searchsync_parser.set_defaults(func=search_sync)
 

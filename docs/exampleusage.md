@@ -190,6 +190,13 @@ optional arguments:
   --time-ago TIME_AGO   only objects updated after X days ago.
 ```
 
+Example command lines from the test suite.
+
+```
+pacifica-search-cmd data_release --time-after='365 days after' --exclude='1234cé'
+pacifica-search-cmd data_release --keyword='transactions.created' --verbose
+```
+
 ### Search Sync
 
 The search synchronization to Elasticsearch is driven by the Policy
@@ -212,4 +219,10 @@ optional arguments:
                         objects per bulk upload.
   --threads THREADS     number of threads to sync data
   --time-ago TIME_AGO   only objects newer than X days ago.
+```
+
+Example command lines from the test suite.
+
+```
+pacifica-policy-cmd searchsync --objects-per-page=4 --threads=1 --time-ago='7 days ago'
 ```
