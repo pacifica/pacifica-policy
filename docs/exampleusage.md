@@ -224,5 +224,5 @@ optional arguments:
 Example command lines from the test suite.
 
 ```
-pacifica-policy-cmd searchsync --objects-per-page=4 --threads=1 --time-ago='7 days ago'
+pacifica-policy-cmd searchsync --objects-per-page=4 --threads=1 --time-ago='7 days ago' --exclude='keys.104'
 ```

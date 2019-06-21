@@ -190,10 +190,10 @@ def start_work(work_queue):
     cli = es_client()
     job = work_queue.get()
     while job:
-        print('Starting {} ({}): {}'.format(job[0], job[1], job[2]))
+        print('Starting {object} ({time_field}): {page} of {num_pages}'.format(**job))
         try_doing_work(cli, job)
         work_queue.task_done()
-        print('Finished {} ({}): {}'.format(job[0], job[1], job[2]))
+        print('Finished {object} ({time_field}): {page} of {num_pages}'.format(**job))
         job = work_queue.get()
     work_queue.task_done()
 
@@ -204,15 +204,20 @@ def try_doing_work(cli, job):
     success = False
     while not success and tries_left:
         try:
-            helpers.bulk(cli, yield_data(*job))
+            helpers.bulk(cli, yield_data(**job))
             success = True
         except ElasticsearchException:  # pragma: no cover
             tries_left -= 1
     return success
 
 
-def yield_data(obj, time_field, page, items_per_page, time_delta):
+def yield_data(**kwargs):
     """yield objects from obj for bulk ingest."""
+    obj = kwargs['object']
+    time_field = kwargs['time_field']
+    page = kwargs['page']
+    items_per_page = kwargs['items_per_page']
+    time_delta = kwargs['time_delta']
     get_args = {
         '{time_field}': '{epoch}',
         '{time_field}_operator': 'gt',
@@ -234,7 +239,7 @@ def yield_data(obj, time_field, page, items_per_page, time_delta):
         )
     )
     objs = resp.json()
-    return SearchRender.generate(obj, objs)
+    return SearchRender.generate(obj, objs, kwargs['exclude'])
 
 
 def create_worker_threads(threads, work_queue):
@@ -248,7 +253,7 @@ def create_worker_threads(threads, work_queue):
     return work_threads
 
 
-def generate_work(items_per_page, work_queue, time_ago):
+def generate_work(items_per_page, work_queue, time_ago, exclude):
     """Generate the work from the db and send it to the work queue."""
     now = datetime.now()
     time_delta = (now - time_ago).replace(microsecond=0)
@@ -265,8 +270,15 @@ def generate_work(items_per_page, work_queue, time_ago):
             total_count = resp.json()['record_count']
             num_pages = int(ceil(float(total_count) / items_per_page))
             for page in range(1, num_pages + 1):
-                work_queue.put(
-                    (obj, time_field, page, items_per_page, time_delta))
+                work_queue.put({
+                    'object': obj,
+                    'time_field': time_field,
+                    'page': page,
+                    'items_per_page': items_per_page,
+                    'time_delta': time_delta,
+                    'num_pages': num_pages+1,
+                    'exclude': exclude
+                })
 
 
 def search_sync(args):
@@ -275,7 +287,7 @@ def search_sync(args):
     Root.try_meta_connect()
     work_queue = Queue(32)
     work_threads = create_worker_threads(args.threads, work_queue)
-    generate_work(args.items_per_page, work_queue, args.time_ago)
+    generate_work(args.items_per_page, work_queue, args.time_ago, args.exclude)
     for i in range(args.threads):
         work_queue.put(False)
     for wthread in work_threads:

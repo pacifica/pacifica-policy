@@ -19,10 +19,12 @@ class SearchRender(object):
         return getattr(obj_mod, '{}Render'.format(''.join(parts)))
 
     @classmethod
-    def generate(cls, obj_cls, objs):
+    def generate(cls, obj_cls, objs, exclude):
         """generate the institution object."""
         render_cls = cls.get_render_class(obj_cls)
         for obj in objs:
+            if u'{}.{}'.format(obj_cls, obj.get('_id', '')) in exclude:
+                continue
             yield {
                 '_op_type': 'update',
                 '_index': ELASTIC_INDEX,

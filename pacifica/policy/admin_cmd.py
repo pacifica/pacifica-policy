@@ -70,6 +70,11 @@ def create_subcommands(subparsers):
 def searchsync_options(searchsync_parser):
     """Add the searchsync command line options."""
     searchsync_parser.add_argument(
+        '--exclude', dest='exclude',
+        help='type.id of object to exclude (i.e. --exclude="projects.1234").',
+        nargs='*', default=set(), type=text_type
+    )
+    searchsync_parser.add_argument(
         '--objects-per-page', default=40000,
         type=int, help='objects per bulk upload.',
         required=False, dest='items_per_page'
