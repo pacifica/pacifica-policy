@@ -7,7 +7,7 @@ from .base import SearchBase
 
 
 class InstitutionsRender(SearchBase):
-    """Render an insitution for search."""
+    """Render an institution for search."""
 
     fields = [
         'obj_id', 'display_name', 'keyword', 'release',
@@ -41,12 +41,12 @@ class InstitutionsRender(SearchBase):
 
     @classmethod
     def release(cls, **_inst_obj):
-        """Return whether the user has released anything."""
+        """Return whether the institution has released anything."""
         return 'true'
 
     @classmethod
     def get_transactions(cls, **inst_obj):
-        """Return the list of transaction ids for the user."""
+        """Return the list of transaction ids for the institution."""
         ret = set()
         for inst_user_obj in cls.get_rel_by_args('institution_user', institution=inst_obj['_id']):
             ret.update(UsersRender.get_transactions(_id=inst_user_obj['user']))

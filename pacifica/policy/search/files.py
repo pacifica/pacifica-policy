@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class FilesRender(SearchBase):
-    """Render an insitution for search."""
+    """Render an file for search."""
 
     fields = [
         'obj_id', 'display_name', 'mtime', 'ctime', 'keyword',
