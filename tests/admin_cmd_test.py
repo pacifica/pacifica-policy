@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 """Test the admin command line."""
 from unittest import TestCase
+from time import time
 import requests
 from jsonschema import validate
 from pacifica.policy.admin_cmd import main
+from pacifica.policy.search.projects import ProjectsRender
+from pacifica.metadata.orm.transsip import TransSIP
+from pacifica.metadata.orm.transactions import Transactions
 
 
 class TestAdminCMD(TestCase):
@@ -187,3 +191,34 @@ class TestAdminCMD(TestCase):
             'http://localhost:8121/transaction_user?transaction=1234')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json()[0]['transaction'], 1234)
+
+
+class TestPerformanceSearchSync(TestCase):
+    """Test the performance of search sync."""
+
+    num_trans = 10000
+    first_trans_id = 100000
+
+    @classmethod
+    def setUpClass(cls):
+        """Create a bunch of transactions attached to a project."""
+        all_trans = [
+            {'_id': trans_id}
+            for trans_id in range(cls.first_trans_id, cls.first_trans_id+cls.num_trans)
+        ]
+        trans_obj = Transactions()
+        trans_obj._insert(all_trans)
+        all_transsip = [
+            {'_id': trans_id, 'submitter': '10', 'instrument': '54', 'project': '1234a'}
+            for trans_id in range(cls.first_trans_id, cls.first_trans_id+cls.num_trans)
+        ]
+        transsip_obj = TransSIP()
+        transsip_obj._insert(all_transsip)
+
+    def test_project_transactions(self):
+        """Test getting a projects transactions is performant."""
+        start_time = time()
+        resp = ProjectsRender.get_transactions(_id='1234a')
+        end_time = time()
+        self.assertEqual(len(resp), 10002)
+        self.assertTrue(end_time - start_time < 1)
