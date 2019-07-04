@@ -12,17 +12,18 @@ env:
   NOTIFICATIONS_URL: http://127.0.0.1:8080
   PEEWEE_URL: postgres://postgres:@localhost/pacifica_metadata
   ADMIN_USER_ID: 10
+  CACHE_SIZE: 0
 ".script": &1
 - pip install .
 - export POLICY_CPCONFIG="$PWD/server.conf"
 - cd tests
-- coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xv
+- coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv
 - coverage report -m --fail-under 100
 ".before_script": &2
 - psql -c 'create database pacifica_metadata;' -U postgres
 - export METADATA_CPCONFIG="$PWD/travis/server.conf"
 - pacifica-metadata-cmd dbsync
-- pushd tests; python -m pacifica.metadata & echo $! > metadata.pid; popd;
+- pushd tests; python -m pacifica.metadata > metadata-server.log 2>&1 & echo $! > metadata.pid; popd;
 - |
   MAX_TRIES=60
   HTTP_CODE=$(curl -sL -w "%{http_code}\\n" localhost:8121/keys -o /dev/null || true)

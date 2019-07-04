@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Test the admin command line."""
+import logging
 from unittest import TestCase
 from time import time
 import requests
@@ -168,6 +169,9 @@ class TestAdminCMD(TestCase):
         """Test transaction data release."""
         main('--verbose', 'data_release', '--keyword', 'transactions.created',
              '--time-after', '365 days after')
+        # set logger back to info
+        logger = logging.getLogger('urllib3')
+        logger.setLevel('INFO')
         resp = requests.get('http://localhost:8121/transactions?_id=1234')
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.json()[0]['suspense_date'], '2018-07-15')
@@ -207,18 +211,31 @@ class TestPerformanceSearchSync(TestCase):
             for trans_id in range(cls.first_trans_id, cls.first_trans_id+cls.num_trans)
         ]
         trans_obj = Transactions()
+        # pylint: disable=protected-access
         trans_obj._insert(all_trans)
+        # pylint: enable=protected-access
         all_transsip = [
-            {'_id': trans_id, 'submitter': '10', 'instrument': '54', 'project': '1234a'}
+            {'_id': trans_id, 'submitter': '10', 'instrument': '54', 'project': '1238'}
             for trans_id in range(cls.first_trans_id, cls.first_trans_id+cls.num_trans)
         ]
         transsip_obj = TransSIP()
+        # pylint: disable=protected-access
         transsip_obj._insert(all_transsip)
+        # pylint: enable=protected-access
 
     def test_project_transactions(self):
         """Test getting a projects transactions is performant."""
         start_time = time()
-        resp = ProjectsRender.get_transactions(_id='1234a')
+        resp = ProjectsRender.get_transactions(_id='1238')
         end_time = time()
-        self.assertEqual(len(resp), 10002)
+        self.assertEqual(len(resp), 10000)
         self.assertTrue(end_time - start_time < 1)
+
+    def test_project_release(self):
+        """Test getting a projects release state is performant."""
+        start_time = time()
+        resp = ProjectsRender.release(_id='1238')
+        end_time = time()
+        self.assertEqual(resp, 'false')
+        self.assertTrue(end_time - start_time < 250,
+                        'The task took to long {} >= 250 seconds'.format(end_time - start_time))
