@@ -8,7 +8,7 @@ from .base import SearchBase
 
 
 class InstrumentsRender(SearchBase):
-    """Render an insitution for search."""
+    """Render instruments for search."""
 
     fields = [
         'obj_id', 'display_name', 'keyword', 'release',
@@ -48,7 +48,7 @@ class InstrumentsRender(SearchBase):
 
     @classmethod
     def key_value_pairs_obj_lists(cls, **inst_obj):
-        """Get the key value pairs related to the transaction."""
+        """Get the key value pairs related to the instruments."""
         ret = {
             'key_value_hash': {},
             'key_objs': [],

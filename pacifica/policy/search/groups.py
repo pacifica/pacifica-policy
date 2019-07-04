@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class GroupsRender(SearchBase):
-    """Render an insitution for search."""
+    """Render a group for search."""
 
     fields = [
         'obj_id', 'display_name', 'keyword', 'release',
@@ -40,7 +40,7 @@ class GroupsRender(SearchBase):
 
     @classmethod
     def release(cls, **_group_obj):
-        """Return whether the user has released anything."""
+        """Return whether the group has released anything."""
         return 'true'
 
     @classmethod

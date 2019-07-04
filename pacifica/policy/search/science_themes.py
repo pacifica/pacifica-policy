@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class ScienceThemesRender(SearchBase):
-    """Render an insitution for search."""
+    """Render an science theme for search."""
 
     fields = [
         'obj_id', 'display_name', 'keyword', 'release',
@@ -45,7 +45,7 @@ class ScienceThemesRender(SearchBase):
 
     @classmethod
     def get_transactions(cls, **proj_obj):
-        """Return the list of transaction ids for the user."""
+        """Return the list of transaction ids for the science theme."""
         ret = set()
         for rel_proj_obj in cls.get_rel_by_args('projects', science_theme=proj_obj['science_theme']):
             ret.update([

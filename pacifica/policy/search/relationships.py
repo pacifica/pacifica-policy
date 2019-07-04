@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class RelationshipsRender(SearchBase):
-    """Render an insitution for search."""
+    """Render an relationship for search."""
 
     fields = [
         'obj_id', 'name', 'display_name', 'keyword',
@@ -40,7 +40,7 @@ class RelationshipsRender(SearchBase):
 
     @classmethod
     def name(cls, **rel_obj):
-        """Return whether the user has released anything."""
+        """Return the relationship name."""
         return text_type('{name}').format(**rel_obj)
 
     @classmethod

@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class UsersRender(SearchBase):
-    """Render a transaction for search."""
+    """Render a user for search."""
 
     fields = [
         'obj_id', 'display_name', 'keyword', 'release',

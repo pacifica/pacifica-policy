@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class ProjectsRender(SearchBase):
-    """Render an insitution for search."""
+    """Render a project for search."""
 
     fields = [
         'obj_id', 'display_name', 'abstract', 'title',
@@ -72,7 +72,7 @@ class ProjectsRender(SearchBase):
 
     @classmethod
     def release(cls, **proj_obj):
-        """Return whether the user has released anything."""
+        """Return whether the project has released anything."""
         for trans_id in cls._transsip_transsap_merge({'project': proj_obj['_id']}, '_id'):
             if cls.get_rel_by_args('transaction_user', transaction=trans_id, relationship=cls.releaser_uuid):
                 return 'true'
@@ -80,7 +80,7 @@ class ProjectsRender(SearchBase):
 
     @classmethod
     def get_transactions(cls, **proj_obj):
-        """Return the list of transaction ids for the user."""
+        """Return the list of transaction ids for the project."""
         return [
             'transactions_{}'.format(trans_id)
             for trans_id in cls._transsip_transsap_merge({'project': proj_obj['_id']}, '_id')

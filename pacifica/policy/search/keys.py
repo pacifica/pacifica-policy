@@ -6,7 +6,7 @@ from .base import SearchBase
 
 
 class KeysRender(SearchBase):
-    """Render an insitution for search."""
+    """Render a keys for search."""
 
     fields = [
         'obj_id', 'display_name', 'keyword', 'release',
@@ -40,7 +40,7 @@ class KeysRender(SearchBase):
 
     @classmethod
     def release(cls, **_key_obj):
-        """Return whether the user has released anything."""
+        """Return whether the key has released anything."""
         return 'true'
 
     @classmethod
