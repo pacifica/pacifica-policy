@@ -229,13 +229,14 @@ class TestPerformanceSearchSync(TestCase):
         resp = ProjectsRender.get_transactions(_id='1238')
         end_time = time()
         self.assertEqual(len(resp), 10000)
-        self.assertTrue(end_time - start_time < 1)
+        self.assertTrue(end_time - start_time < 1,
+                        'The task took to long {} >= 1 second'.format(end_time - start_time))
 
     def test_project_release(self):
         """Test getting a projects release state is performant."""
         start_time = time()
-        resp = ProjectsRender.release(_id='1238')
+        resp = ProjectsRender.release(_id=u'666c\u00e9')
         end_time = time()
         self.assertEqual(resp, 'false')
-        self.assertTrue(end_time - start_time < 250,
-                        'The task took to long {} >= 250 seconds'.format(end_time - start_time))
+        self.assertTrue(end_time - start_time < 1,
+                        'The task took to long {} >= 1 second'.format(end_time - start_time))

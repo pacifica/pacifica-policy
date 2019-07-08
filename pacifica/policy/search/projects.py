@@ -73,9 +73,9 @@ class ProjectsRender(SearchBase):
     @classmethod
     def release(cls, **proj_obj):
         """Return whether the project has released anything."""
-        for trans_id in cls._transsip_transsap_merge({'project': proj_obj['_id']}, '_id'):
-            if cls.get_rel_by_args('transaction_user', transaction=trans_id, relationship=cls.releaser_uuid):
-                return 'true'
+        results = cls.get_rel_by_args('projects', _id=proj_obj['_id'])
+        if results and results[0].get('accepted_date', False):
+            return 'true'
         return 'false'
 
     @classmethod
