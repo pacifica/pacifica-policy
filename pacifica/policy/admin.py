@@ -162,7 +162,7 @@ class AdminPolicy(object):
         return len(object_is_valid) > 0
 
     def _is_admin(self, user_id):
-        amember_query = '{0}/user_group?group={1}&person={2}'.format(
+        amember_query = '{0}/user_group?group={1}&user={2}'.format(
             self.md_url,
             self.admin_group_id,
             user_id
