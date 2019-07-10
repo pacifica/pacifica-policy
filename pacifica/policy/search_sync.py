@@ -11,9 +11,9 @@ except ImportError:  # pragma: no cover
     from queue import Queue
 from math import ceil
 from datetime import datetime
+from six import text_type
 import requests
 from elasticsearch import Elasticsearch, ElasticsearchException, helpers
-from six import text_type
 from .config import get_config
 from .root import Root
 from .search_render import ELASTIC_INDEX, SearchRender
