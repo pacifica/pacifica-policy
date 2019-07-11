@@ -8,6 +8,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints for status
 - Endpoints for reporting
 
+## [0.7.0] - 2019-06-21
+### Changed
+- Fix #100 add better exclude command line by [@dmlb2000](https://github.com/dmlb2000)
+- Fix #102 add config file caching by [@dmlb2000](https://github.com/dmlb2000)
+- Fix #99 add searchsync performance testing by [@dmlb2000](https://github.com/dmlb2000)
+
+## [0.6.7] - 2019-06-21
+### Changed
+- Fix #93 add exclude searchsync options by [@dmlb2000](https://github.com/dmlb2000)
+- Fix #91 add better docs by [@dmlb2000](https://github.com/dmlb2000)
+
 ## [0.6.6] - 2019-05-30
 ### Changed
 - Add field data flag to the has doi metadata attribute by [@plithnar](https://github.com/plithnar)
