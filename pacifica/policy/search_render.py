@@ -19,11 +19,24 @@ class SearchRender(object):
         return getattr(obj_mod, '{}Render'.format(''.join(parts)))
 
     @classmethod
+    def object_exclude(cls, obj_cls, obj, exclude):
+        """Check if object is part of the exclude tuples."""
+        for xobj_cls, xobj_attr, xvalue in exclude:
+            try:
+                xattr_type = type(obj[xobj_attr])
+                typed_xvalue = xattr_type(xvalue)
+            except (ValueError, KeyError):
+                continue
+            if xobj_cls == obj_cls and xobj_attr in obj and obj[xobj_attr] == typed_xvalue:
+                return True
+        return False
+
+    @classmethod
     def generate(cls, obj_cls, objs, exclude):
         """generate the institution object."""
         render_cls = cls.get_render_class(obj_cls)
         for obj in objs:
-            if u'{}.{}'.format(obj_cls, obj.get('_id', '')) in exclude:
+            if cls.object_exclude(obj_cls, obj, exclude):
                 continue
             yield {
                 '_op_type': 'update',

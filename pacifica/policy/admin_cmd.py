@@ -67,12 +67,19 @@ def create_subcommands(subparsers):
     return datarel_parser, searchsync_parser
 
 
+def exclude_options(obj_str):
+    """Turn an object string into expressive exclude option."""
+    obj_cls_attr, value = obj_str.split('=')
+    obj_cls, obj_attr = obj_cls_attr.split('.')
+    return (obj_cls, obj_attr, value)
+
+
 def searchsync_options(searchsync_parser):
     """Add the searchsync command line options."""
     searchsync_parser.add_argument(
         '--exclude', dest='exclude',
-        help='type.id of object to exclude (i.e. --exclude="projects.1234").',
-        nargs='*', default=set(), type=text_type
+        help='object and attr to exclude (i.e. --exclude="projects._id=1234").',
+        nargs='*', default=set(), type=exclude_options
     )
     searchsync_parser.add_argument(
         '--objects-per-page', default=40000,
