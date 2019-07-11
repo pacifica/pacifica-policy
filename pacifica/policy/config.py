@@ -6,9 +6,14 @@ try:
     from ConfigParser import SafeConfigParser
 except ImportError:  # pragma: no cover python 2 vs 3 issue
     from configparser import ConfigParser as SafeConfigParser
+try:
+    from functools import lru_cache
+except ImportError:  # pragma: no cover python 2 vs 3 issue
+    from backports.functools_lru_cache import lru_cache
 from pacifica.policy.globals import CONFIG_FILE
 
 
+@lru_cache(maxsize=1)
 def get_config():
     """
     Return the ConfigParser object with defaults set.
