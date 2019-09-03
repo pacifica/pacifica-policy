@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints for status
 - Endpoints for reporting
 
+## [0.8.0] - 2019-09-03
+### Removed
+- Deprecated SearchSync (closed #107 and #95) functionality by [@dmlb2000](https://github.com/dmlb2000)
+- Pull #110 Refactored testing suite by [@dmlb2000](https://github.com/dmlb2000)
+
 ## [0.7.0] - 2019-06-21
 ### Changed
 - Fix #100 add better exclude command line by [@dmlb2000](https://github.com/dmlb2000)
