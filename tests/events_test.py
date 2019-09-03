@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Test the events policy."""
-from os.path import join
+from __future__ import absolute_import
+from os.path import join, dirname, realpath
 from json import loads, dumps
 from cherrypy.test import helper
-from common_test import CommonCPSetup
+from .common_test import CommonCPSetup
 
 
 class TestEventsPolicy(helper.CPWebCase, CommonCPSetup):
@@ -16,8 +17,9 @@ class TestEventsPolicy(helper.CPWebCase, CommonCPSetup):
 
     def test_events_query(self):
         """Test posting the queries."""
-        valid_query = loads(
-            open(join('test_files', 'events_query.json')).read())
+        valid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'events_query.json')
+        ).read())
         ret_data = self.get_json_page('/events/dmlb2001', valid_query)
         self.assertFalse(ret_data is None)
         self.assertTrue('status' in ret_data)

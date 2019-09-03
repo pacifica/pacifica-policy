@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 """Common server setup code for CherryPy testing."""
 # import logging
+import os
 from json import dumps, loads
 import cherrypy
 from pacifica.policy.root import Root, error_page_default
-from pacifica.policy.globals import CHERRYPY_CONFIG
 
 
 class CommonCPSetup(object):
@@ -29,6 +29,8 @@ class CommonCPSetup(object):
         # logger = logging.getLogger('urllib2')
         # logger.setLevel(logging.DEBUG)
         # logger.addHandler(logging.StreamHandler())
+        os.environ['POLICY_CPCONFIG'] = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), '..', 'server.conf')
         cherrypy.config.update({'error_page.default': error_page_default})
-        cherrypy.config.update(CHERRYPY_CONFIG)
-        cherrypy.tree.mount(Root(), '/', CHERRYPY_CONFIG)
+        cherrypy.config.update(os.environ['POLICY_CPCONFIG'])
+        cherrypy.tree.mount(Root(), '/', os.environ['POLICY_CPCONFIG'])

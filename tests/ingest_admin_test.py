@@ -1,11 +1,12 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Test the ingest with httpretty."""
-from os.path import join
+from __future__ import absolute_import
+from os.path import join, dirname, realpath
 from json import loads
 import httpretty
 from pacifica.policy.ingest.rest import IngestPolicy
-from uploader_policy_test import TestUploader
+from .uploader_policy_test import TestUploader
 
 
 class TestIngest(TestUploader):
@@ -15,8 +16,9 @@ class TestIngest(TestUploader):
     def test_failed_admin_id(self):
         """override this to test valid query."""
         super(TestIngest, self).test_failed_admin_id()
-        valid_query = loads(
-            open(join('test_files', 'ingest_base_query.json')).read())
+        valid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'ingest_base_query.json')
+        ).read())
         ipolicy = IngestPolicy()
         # pylint: disable=no-member
         # pylint: disable=protected-access

@@ -9,7 +9,6 @@ import requests
 from dateutil import parser
 from .config import get_config
 from .admin import AdminPolicy
-from .search.base import SearchBase
 
 VALID_KEYWORDS = [
     'projects.actual_end_date',
@@ -20,6 +19,11 @@ VALID_KEYWORDS = [
     'transactions.created',
     'transactions.updated'
 ]
+
+GLOBAL_GET_ARGS = {
+    'recursion_depth': '0',
+    'recursion_limit': '1'
+}
 
 
 def collate_objs_from_key(resp, objs, date_key):
@@ -40,7 +44,7 @@ def relavent_data_release_objs(time_ago, orm_obj, exclude_list):
         'suspense_date_1': datetime.now().replace(microsecond=0).isoformat(),
         'suspense_date_operator': 'between'
     }
-    suspense_args.update(SearchBase.global_get_args)
+    suspense_args.update(GLOBAL_GET_ARGS)
     resp = requests.get(
         text_type('{base_url}/{orm_obj}').format(
             base_url=get_config().get('metadata', 'endpoint_url'),
@@ -80,7 +84,7 @@ def relavent_suspense_date_objs(time_ago, orm_obj, date_key):
                 datetime.now() - time_ago
             ).replace(microsecond=0).isoformat()
         }
-        obj_args.update(SearchBase.global_get_args)
+        obj_args.update(GLOBAL_GET_ARGS)
         resp = requests.get(
             text_type('{base_url}/{orm_obj}').format(
                 base_url=get_config().get('metadata', 'endpoint_url'),

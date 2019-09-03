@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Test status policy methods."""
+from __future__ import absolute_import
 from json import loads, dumps
 from cherrypy.test import helper
-from common_test import CommonCPSetup
+from .common_test import CommonCPSetup
 
 
 class TestStatusPolicy(helper.CPWebCase, CommonCPSetup):

@@ -5,7 +5,7 @@ from __future__ import print_function
 from json import dumps, loads
 from cherrypy.test import helper
 from pacifica.policy.uploader.rest import UploaderPolicy
-from common_test import CommonCPSetup
+from .common_test import CommonCPSetup
 
 
 class TestUploaderPolicy(helper.CPWebCase, CommonCPSetup):

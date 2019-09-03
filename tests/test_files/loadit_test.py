@@ -4,7 +4,11 @@
 from os import getenv
 from os.path import dirname, realpath, join
 from json import loads
+# pylint: disable=no-name-in-module
+# pylint: disable=import-error
 from pacifica.metadata.client import PMClient
+# pylint: enable=no-name-in-module
+# pylint: enable=import-error
 
 
 def main():

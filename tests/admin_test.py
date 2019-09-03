@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Test the uploader policy."""
+from __future__ import absolute_import
 from json import loads
 from cherrypy.test import helper
 from pacifica.policy.admin import AdminPolicy
-from common_test import CommonCPSetup
+from .common_test import CommonCPSetup
 
 
 class TestAdminBase(helper.CPWebCase, CommonCPSetup):

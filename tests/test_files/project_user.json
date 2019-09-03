@@ -5,6 +5,11 @@
     "user": 100
   },
   {
+    "project": "1234b\u00e9",
+    "relationship_name": "co_principal_investigator",
+    "user": 11
+  },
+  {
     "project": "1234c\u00e9",
     "relationship_name": "member_of",
     "user": 11

@@ -55,7 +55,6 @@ test_script:
 - ps: >
     mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
     pre-commit run -a;
-    $env:POLICY_CPCONFIG = "$PWD/server.conf";
     pip install .; cd tests;
-    coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xv ;
+    coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv;
     coverage report -m --fail-under=100;

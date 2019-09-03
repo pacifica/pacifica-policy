@@ -8,7 +8,6 @@ from argparse import ArgumentParser
 from datetime import timedelta
 from six import text_type
 from .data_release import data_release, VALID_KEYWORDS
-from .search_sync import search_sync
 
 logging.basicConfig()
 LOGGER = logging.getLogger('urllib3')
@@ -59,43 +58,7 @@ def create_subcommands(subparsers):
         help='data_release help',
         description='data release by policy'
     )
-    searchsync_parser = subparsers.add_parser(
-        'searchsync',
-        help='searchsync help',
-        description='sync sql data to elastic for search'
-    )
-    return datarel_parser, searchsync_parser
-
-
-def exclude_options(obj_str):
-    """Turn an object string into expressive exclude option."""
-    obj_cls_attr, value = obj_str.split('=')
-    obj_cls, obj_attr = obj_cls_attr.split('.')
-    return (obj_cls, obj_attr, value)
-
-
-def searchsync_options(searchsync_parser):
-    """Add the searchsync command line options."""
-    searchsync_parser.add_argument(
-        '--exclude', dest='exclude',
-        help='object and attr to exclude (i.e. --exclude="projects._id=1234").',
-        nargs='*', default=set(), type=exclude_options
-    )
-    searchsync_parser.add_argument(
-        '--objects-per-page', default=40000,
-        type=int, help='objects per bulk upload.',
-        required=False, dest='items_per_page'
-    )
-    searchsync_parser.add_argument(
-        '--threads', default=4, required=False,
-        type=int, help='number of threads to sync data',
-    )
-    searchsync_parser.add_argument(
-        '--time-ago', dest='time_ago', type=objstr_to_timedelta,
-        help='only objects newer than X days ago (i.e. --time-ago="7 days ago").',
-        required=False, default=timedelta(days=36500)
-    )
-    searchsync_parser.set_defaults(func=search_sync)
+    return datarel_parser
 
 
 def main(*argv):
@@ -106,10 +69,7 @@ def main(*argv):
         help='enable verbose debug output'
     )
     subparsers = parser.add_subparsers(help='sub-command help')
-    datarel_parser, searchsync_parser = create_subcommands(
-        subparsers
-    )
-    searchsync_options(searchsync_parser)
+    datarel_parser = create_subcommands(subparsers)
     datarel_options(datarel_parser)
     if not argv:  # pragma: no cover
         argv = sys_argv[1:]

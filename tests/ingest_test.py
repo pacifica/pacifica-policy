@@ -1,10 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Test the uploader policy."""
-from os.path import join
+from __future__ import absolute_import
+from os.path import join, dirname, realpath
 from json import dumps, loads
 from cherrypy.test import helper
-from common_test import CommonCPSetup
+from .common_test import CommonCPSetup
 
 
 class TestIngestPolicy(helper.CPWebCase, CommonCPSetup):
@@ -16,8 +17,9 @@ class TestIngestPolicy(helper.CPWebCase, CommonCPSetup):
 
     def test_queries(self):
         """Test posting the queries."""
-        valid_query = loads(
-            open(join('test_files', 'ingest_base_query.json')).read())
+        valid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'ingest_base_query.json')
+        ).read())
         ret_data = self.get_json_page('/ingest', valid_query)
         self.assertFalse(ret_data is None)
         self.assertTrue('status' in ret_data)
@@ -29,8 +31,9 @@ class TestIngestPolicy(helper.CPWebCase, CommonCPSetup):
         self.get_json_page('/ingest', valid_query)
 
         # change the project to be invalid => fails
-        invalid_query = loads(
-            open(join('test_files', 'ingest_base_query.json')).read())
+        invalid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'ingest_base_query.json')
+        ).read())
         invalid_query[2]['value'] = '12'
         self.getPage('/ingest',
                      self.headers +
@@ -43,8 +46,9 @@ class TestIngestPolicy(helper.CPWebCase, CommonCPSetup):
         self.assertTrue('message' in ret_data)
 
         # change instrument to be invalid => fails
-        invalid_query = loads(
-            open(join('test_files', 'ingest_base_query.json')).read())
+        invalid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'ingest_base_query.json')
+        ).read())
         invalid_query[3]['value'] = 4321
         self.getPage('/ingest',
                      self.headers +
@@ -57,8 +61,9 @@ class TestIngestPolicy(helper.CPWebCase, CommonCPSetup):
         self.assertTrue('message' in ret_data)
 
         # change the query so that the instrument xrefs and project xrefs fail (but for valid base entities)
-        invalid_query = loads(
-            open(join('test_files', 'ingest_base_query.json')).read())
+        invalid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'ingest_base_query.json')
+        ).read())
         invalid_query[3]['value'] = 74  # instrument
         invalid_query[2]['value'] = u'1234c\u00e9'  # project
         invalid_query[1]['value'] = 12  # submitter
