@@ -8,6 +8,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints for status
 - Endpoints for reporting
 
+## [0.8.1] - 2019-11-08
+### Updated
+- Pull #112 Allow admins to see all events by [@dmlb2000](https://github.com/dmlb2000)
+
 ## [0.8.0] - 2019-09-03
 ### Removed
 - Deprecated SearchSync (closed #107 and #95) functionality by [@dmlb2000](https://github.com/dmlb2000)
