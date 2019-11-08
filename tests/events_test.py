@@ -25,10 +25,20 @@ class TestEventsPolicy(helper.CPWebCase, CommonCPSetup):
         self.assertTrue('status' in ret_data)
         self.assertEqual(ret_data['status'], 'success')
 
+    def test_admins_events_query(self):
+        """Admin get valid events of any type."""
+        valid_query = loads(open(
+            join(dirname(realpath(__file__)), 'test_files', 'events_orm.json')
+        ).read())
+        ret_data = self.get_json_page('/events/dmlb2001', valid_query)
+        self.assertFalse(ret_data is None)
+        self.assertTrue('status' in ret_data)
+        self.assertEqual(ret_data['status'], 'success')
+
     def test_bad_events_query(self):
         """Test posting the queries."""
         invalid_query = {'some': {'random': 'data'}, 'in': ['a', 'hash']}
-        self.getPage('/events/dmlb2001',
+        self.getPage('/events/dmlb2000',
                      self.headers +
                      [('Content-Length', str(len(dumps(invalid_query))))],
                      'POST',

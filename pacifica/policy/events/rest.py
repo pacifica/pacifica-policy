@@ -25,6 +25,8 @@ class EventsPolicy(IngestPolicy):
         userinfo = self._user_info_from_kwds(
             network_id=username, recursion_depth=0, recursion_limit=1)
         if event_obj.get('eventType', False) != 'org.pacifica.metadata.ingest':
+            if self._is_admin(userinfo[0]['_id']):
+                return {'status': 'success'}
             raise cherrypy.HTTPError(
                 412,
                 text_type('Precondition Failed: Invalid eventType for {0}').format(
