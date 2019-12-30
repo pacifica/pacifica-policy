@@ -1,5 +1,6 @@
 language: python
-dist: xenial
+dist: bionic
+python: 3.6
 stages:
 - lint
 - test
@@ -9,7 +10,8 @@ env:
   ADMIN_USER_ID: 10
   CACHE_SIZE: 0
 script:
-- coverage run --include='pacifica/policy/*' -m pytest -xsv tests
+- pip install .
+- coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv tests
 - coverage report -m --fail-under 100
 before_script:
 - sudo mount -o remount,size=25% /var/ramfs
@@ -21,18 +23,11 @@ before_script:
 jobs:
   include:
   - stage: lint
-    python: 3.6
-    before_script: skip
-    script: pre-commit run -a
-  - python: 2.7
     before_script: skip
     script: pre-commit run -a
   - stage: test
-    python: 3.6
-  - python: 2.7
   - stage: test-docker
     sudo: required
-    python: 3.6
     before_script: skip
     services:
     - docker
@@ -49,32 +44,15 @@ jobs:
       docker-compose exec metadataserver /bin/bash -c 'cd /usr/src/app/tests; python test_files/loadit_test.py';
       curl http://127.0.0.1:8181/status/users/search/dmlb2001/simple;
   - stage: deploy
-    services: []
     language: python
     before_install: skip
     before_script: skip
     script: skip
-    python: 3.6
     deploy:
       skip_cleanup: true
       provider: pypi
       user: dmlb2000
       distributions: sdist bdist_wheel
-      password:
-        secure: bmMGOYjbmFy+7/ct2eRduWCvJUepK8KDEJ3eG2XmHN6Cr2/ou9o0AOnO+ux7pMAvNEW/X5UcAHM4CrB2rNYmnsIShHDfdKLmSgdSawOyaLpdrAoecoOygCBOcJrHfqERU1iYpRVlx2jgLbXRn6+S87nj8hothtdTrdwEOnoUsb5A02LMmq1a7/zD2klHlqNtW90IRHJzzVSA+ME/JcpKGxwugBSLlSaTgC7CvDePQrZg/4udEFUXPCRVDtwJ7wt1AVVp0xoMuvlRDek+32ZD+dqIJWpS7Q3aYCmj+oGrKMA8c4ESofg0CB71AQx5WSjJgZFKe/+jzyHzleteyJuNOlZWQO2iPy3eKfFi22lmRbyLXMoNJmyqHoLRzncIJsZoF3nEENUFiIuK2HkoP1FR1XcrP8DMUiw4CRkYT8qXzxfvutRnccaqjmybbJi/oRZs5A8zrMHF+eWWQugvzvvqDtVuDGvzl5ruqs9Esc+pX7i4I1uUEHfi39I3FGrjM7MoluvmUfJV/0204e86OkCmexqUn/NH1ZUsd42uCDe9ilpGWsnjYT20WAqwZpIxryb6daeGYoVcdp/HnSYxGMRZ6uB9/Fgr1s80G7i1QJ7YYsBlJZxbFRVz6yyUlHnYVp3yLqkTJjXoxUxa4SBZ9B1a4N9Tb7LHrqB1fPQqFggm3bc=
-      on:
-        tags: true
-  - services: []
-    language: python
-    before_install: skip
-    before_script: skip
-    script: skip
-    python: 2.7
-    deploy:
-      skip_cleanup: true
-      provider: pypi
-      user: dmlb2000
-      distributions: bdist_wheel
       password:
         secure: bmMGOYjbmFy+7/ct2eRduWCvJUepK8KDEJ3eG2XmHN6Cr2/ou9o0AOnO+ux7pMAvNEW/X5UcAHM4CrB2rNYmnsIShHDfdKLmSgdSawOyaLpdrAoecoOygCBOcJrHfqERU1iYpRVlx2jgLbXRn6+S87nj8hothtdTrdwEOnoUsb5A02LMmq1a7/zD2klHlqNtW90IRHJzzVSA+ME/JcpKGxwugBSLlSaTgC7CvDePQrZg/4udEFUXPCRVDtwJ7wt1AVVp0xoMuvlRDek+32ZD+dqIJWpS7Q3aYCmj+oGrKMA8c4ESofg0CB71AQx5WSjJgZFKe/+jzyHzleteyJuNOlZWQO2iPy3eKfFi22lmRbyLXMoNJmyqHoLRzncIJsZoF3nEENUFiIuK2HkoP1FR1XcrP8DMUiw4CRkYT8qXzxfvutRnccaqjmybbJi/oRZs5A8zrMHF+eWWQugvzvvqDtVuDGvzl5ruqs9Esc+pX7i4I1uUEHfi39I3FGrjM7MoluvmUfJV/0204e86OkCmexqUn/NH1ZUsd42uCDe9ilpGWsnjYT20WAqwZpIxryb6daeGYoVcdp/HnSYxGMRZ6uB9/Fgr1s80G7i1QJ7YYsBlJZxbFRVz6yyUlHnYVp3yLqkTJjXoxUxa4SBZ9B1a4N9Tb7LHrqB1fPQqFggm3bc=
       on:

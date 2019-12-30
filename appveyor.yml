@@ -16,8 +16,7 @@ environment:
   ADMIN_USER_ID: 10
   CACHE_SIZE: 0
   matrix:
-  - PYTHON: C:\Python27-x64
-  - PYTHON: C:\Python36-x64
+    - PYTHON: C:\Python36-x64
 
 install:
 - ps: >
@@ -55,6 +54,6 @@ test_script:
 - ps: >
     mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
     pre-commit run -a;
-    pip install .; cd tests;
-    coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv;
+    pip install .;
+    coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv tests;
     coverage report -m --fail-under=100;
