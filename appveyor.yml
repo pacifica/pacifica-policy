@@ -17,6 +17,8 @@ environment:
   CACHE_SIZE: 0
   matrix:
     - PYTHON: C:\Python36-x64
+    - PYTHON: C:\Python37-x64
+    - PYTHON: C:\Python38-x64
 
 install:
 - ps: >
