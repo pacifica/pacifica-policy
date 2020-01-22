@@ -8,7 +8,7 @@ from pacifica.policy.config import get_config
 
 
 # pylint: disable=too-few-public-methods
-class TransactionLookup(object):
+class TransactionLookup:
     """Retrieves details of a given project."""
 
     exposed = True

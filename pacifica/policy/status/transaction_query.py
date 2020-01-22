@@ -7,7 +7,7 @@ from pacifica.policy.status.transaction.files import FileLookup
 
 
 # pylint: disable=too-few-public-methods
-class TransactionQuery(object):
+class TransactionQuery:
     """CherryPy root object class."""
 
     exposed = False

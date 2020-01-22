@@ -24,8 +24,7 @@ class InstrumentKeywordSearch(QueryBase):
         if inst_query.status_code == 200:
             inst_response = loads(inst_query.text)
             return self._clean_up_instrument_list(inst_response, user_id)
-        else:
-            raise HTTPError(inst_query.status_code)
+        raise HTTPError(inst_query.status_code)
 
     def _clean_up_instrument_list(self, inst_response, user_id):
         """Clear out entries that done belong to this user."""

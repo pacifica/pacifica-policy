@@ -4,7 +4,7 @@ httpretty
 pacifica-metadata
 pep257
 pre-commit
-pylint<2
+pylint>2
 pytest
 radon
 recommonmark

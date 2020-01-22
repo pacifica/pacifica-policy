@@ -6,7 +6,7 @@ from pacifica.policy.status.user.lookup import UserLookup
 
 
 # pylint: disable=too-few-public-methods
-class UserQuery(object):
+class UserQuery:
     """CherryPy root object class."""
 
     exposed = True

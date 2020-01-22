@@ -6,7 +6,7 @@ from pacifica.policy.config import get_config
 
 
 # pylint: disable=too-few-public-methods
-class QueryBase(object):
+class QueryBase:
     """Formats summary data for other classes down the tree."""
 
     base_user_info = {

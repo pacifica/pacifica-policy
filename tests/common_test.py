@@ -8,7 +8,7 @@ import cherrypy
 from pacifica.policy.root import Root, error_page_default
 
 
-class CommonCPSetup(object):
+class CommonCPSetup:
     """Common CherryPy setup class."""
 
     # pylint: disable=no-member

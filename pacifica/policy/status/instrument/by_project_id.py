@@ -35,8 +35,7 @@ class InstrumentsByProject(QueryBase):
         """CherryPy GET method."""
         project_info = InstrumentsByProject._get_instruments_for_project(
             project_id)
-        instruments = {index: info for (
-            index, info) in project_info.get('instruments').items()}
+        instruments = project_info.get('instruments', {})
         cleaned_instruments = []
         if instruments:
             clean_info = {

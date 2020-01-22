@@ -6,7 +6,7 @@ from pacifica.policy.status.instrument.search import InstrumentKeywordSearch
 
 
 # pylint: disable=too-few-public-methods
-class InstrumentQuery(object):
+class InstrumentQuery:
     """CherryPy root object class."""
 
     exposed = False

@@ -6,7 +6,7 @@ from pacifica.policy.reporting.transaction.transaction_details import Transactio
 
 
 # pylint: disable=too-few-public-methods
-class ReportingPolicy(object):
+class ReportingPolicy:
     """
     CherryPy root object class.
 

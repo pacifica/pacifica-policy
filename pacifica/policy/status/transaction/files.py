@@ -8,7 +8,7 @@ from pacifica.policy.config import get_config
 
 
 # pylint: disable=too-few-public-methods
-class FileLookup(object):
+class FileLookup:
     """Retrieves files for a given transaction_id."""
 
     exposed = True

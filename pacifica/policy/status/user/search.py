@@ -24,8 +24,7 @@ class UserSearch(QueryBase):
         retval = response.json()
         if response.status_code == 200:
             return retval
-        else:
-            raise HTTPError(response.status_code)
+        raise HTTPError(response.status_code)
 
     # CherryPy requires these named methods
     # Add HEAD (basically Get without returning body

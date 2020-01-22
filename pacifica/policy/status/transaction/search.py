@@ -7,7 +7,7 @@ from pacifica.policy.config import get_config
 
 
 # pylint: disable=too-few-public-methods
-class TransactionSearch(object):
+class TransactionSearch:
     """Retrieves a set of transactions for a given keyword set."""
 
     exposed = True

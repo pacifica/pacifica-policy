@@ -8,7 +8,7 @@ from pacifica.policy.config import get_config
 
 
 # pylint: disable=too-few-public-methods
-class UserLookup(object):
+class UserLookup:
     """Retrieves info for the specified user."""
 
     exposed = True

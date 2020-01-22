@@ -7,7 +7,7 @@ from pacifica.policy.status.project.lookup import ProjectLookup
 
 
 # pylint: disable=too-few-public-methods
-class ProjectQuery(object):
+class ProjectQuery:
     """CherryPy root object class."""
 
     exposed = False

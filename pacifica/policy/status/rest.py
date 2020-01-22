@@ -9,7 +9,7 @@ from pacifica.policy.status.user_query import UserQuery
 
 
 # pylint: disable=too-few-public-methods
-class StatusPolicy(object):
+class StatusPolicy:
     """
     CherryPy root object class.
 

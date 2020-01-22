@@ -10,7 +10,7 @@ RECURSION_DEPTH = 0
 
 
 # pylint: disable=too-few-public-methods
-class AdminPolicy(object):
+class AdminPolicy:
     """
     Enforces the admin policy.
 
@@ -79,7 +79,7 @@ class AdminPolicy(object):
             instrument_id=inst_id
         )
         inst_projs = loads(requests.get(inst_projs_url).text)
-        inst_projs = set([part['project'] for part in inst_projs])
+        inst_projs = {part['project'] for part in inst_projs}
         return inst_projs
 
     def _projects_for_user_inst(self, user_id, inst_id):
@@ -124,8 +124,7 @@ class AdminPolicy(object):
             return list(user_insts)
         proj_insts_url = self._format_url(
             'proj_instrument_url', project=proj_id)
-        proj_insts = set([part['instrument']
-                          for part in loads(requests.get(proj_insts_url).text)])
+        proj_insts = {part['instrument'] for part in loads(requests.get(proj_insts_url).text)}
         inst_groups = set()
         for inst_id in proj_insts:
             inst_groups |= set(self._groups_for_inst(inst_id))
@@ -145,7 +144,7 @@ class AdminPolicy(object):
         user_proj_url = self._format_url(
             'proj_user_url', project=proj_id)
         user_projs = loads(requests.get(user_proj_url).text)
-        return list(set([str(part['user']) for part in user_projs]))
+        return list({str(part['user']) for part in user_projs})
 
     def _user_info_from_kwds(self, **kwds):
         return loads(requests.get(self._format_url('all_users_url', **kwds)).text)
