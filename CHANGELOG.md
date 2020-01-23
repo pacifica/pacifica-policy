@@ -8,6 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints for status
 - Endpoints for reporting
 
+## [0.8.2] - 2020-01-22
+### Updated
+- Pull #116 Add Python 3.7 and 3.8 by [@dmlb2000](https://github.com/dmlb2000)
+- Pull #115 Update Pylint 2.0+ by [@dmlb2000](https://github.com/dmlb2000)
+- Pull #114 Remove Python 2.7 support by [@dmlb2000](https://github.com/dmlb2000)
+
 ## [0.8.1] - 2019-11-08
 ### Updated
 - Pull #112 Allow admins to see all events by [@dmlb2000](https://github.com/dmlb2000)
