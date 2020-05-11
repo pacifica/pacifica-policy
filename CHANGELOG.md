@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Endpoints for status
 - Endpoints for reporting
 
+## [0.8.3] - 2020-05-11
+### Updated
+- Pull #118 Remove Requirements pip>=20 by [@dmlb2000](https://github.com/dmlb2000)
+- Pull #119 Remove Elasticsearch and Six by [@dmlb2000](https://github.com/dmlb2000)
+
 ## [0.8.2] - 2020-01-22
 ### Updated
 - Pull #116 Add Python 3.7 and 3.8 by [@dmlb2000](https://github.com/dmlb2000)
