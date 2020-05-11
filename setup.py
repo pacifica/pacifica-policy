@@ -28,10 +28,8 @@ setup(
     install_requires=[
         'backports.functools_lru_cache',
         'cherrypy',
-        'elasticsearch',
         'pacifica-namespace',
         'python-dateutil',
-        'requests',
-        'six'
+        'requests'
     ]
 )

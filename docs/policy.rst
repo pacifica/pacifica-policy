@@ -16,8 +16,6 @@ Policy Python Module
    policy.data_release
    policy.globals
    policy.root
-   policy.search_render
-   policy.search_sync
    policy.validation
    policy.wsgi
 

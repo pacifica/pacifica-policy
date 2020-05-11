@@ -8,7 +8,6 @@ services:
     ports:
     - 8181:8181
     environment:
-      ELASTIC_ENDPOINT: http://elasticdb:9200
       ADMIN_USER_ID: 10
       METADATA_URL: http://metadata:8121
       STATUS_URL: http://metadata:8121/groups

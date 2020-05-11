@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """Events rest module for the cherrypy endpoint."""
-from six import text_type
 import cherrypy
 from pacifica.policy.ingest.rest import IngestPolicy
 
@@ -29,7 +28,7 @@ class EventsPolicy(IngestPolicy):
                 return {'status': 'success'}
             raise cherrypy.HTTPError(
                 412,
-                text_type('Precondition Failed: Invalid eventType for {0}').format(
+                'Precondition Failed: Invalid eventType for {0}'.format(
                     event_obj.get('eventType', 'Not Present')
                 )
             )

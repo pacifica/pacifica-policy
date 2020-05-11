@@ -29,7 +29,6 @@ Below is an example post body::
         },
     ]
 """
-from six import text_type
 from cherrypy import tools, request, HTTPError
 from pacifica.policy.uploader.rest import UploaderPolicy
 
@@ -65,11 +64,11 @@ class IngestPolicy(UploaderPolicy):
                 valid_terms[variable] = value
         if not invalid_terms:
             # all the incoming terms are valid, check for xrefs
-            if text_type(valid_terms['project']) not in self._projects_for_user_inst(
+            if str(valid_terms['project']) not in self._projects_for_user_inst(
                     valid_terms['submitter'], valid_terms['instrument']):
                 invalid_terms.append(
-                    text_type('project ({}) not in user instrument list ({})').format(
-                        text_type(valid_terms['project']),
+                    'project ({}) not in user instrument list ({})'.format(
+                        valid_terms['project'],
                         self._projects_for_user_inst(
                             valid_terms['submitter'],
                             valid_terms['instrument']
@@ -80,7 +79,7 @@ class IngestPolicy(UploaderPolicy):
                     valid_terms['submitter'], valid_terms['project']
             ):
                 invalid_terms.append(
-                    text_type('instrument ({}) not in user project list ({})').format(
+                    'instrument ({}) not in user project list ({})'.format(
                         int(valid_terms['instrument']),
                         self._instruments_for_user_proj(
                             valid_terms['submitter'],
@@ -91,8 +90,10 @@ class IngestPolicy(UploaderPolicy):
             if not invalid_terms:
                 return {'status': 'success'}
 
-        raise HTTPError(412, text_type(
-            'Precondition Failed: Invalid values for {0}').format(', '.join(invalid_terms)))
+        raise HTTPError(
+            412,
+            'Precondition Failed: Invalid values for {0}'.format(', '.join(invalid_terms))
+        )
 
     # pylint: disable=invalid-name
     @tools.json_in()

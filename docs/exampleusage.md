@@ -196,33 +196,3 @@ Example command lines from the test suite.
 pacifica-search-cmd data_release --time-after='365 days after' --exclude='1234cé'
 pacifica-search-cmd data_release --keyword='transactions.created' --verbose
 ```
-
-### Search Sync
-
-The search synchronization to Elasticsearch is driven by the Policy
-service. The metadata in Elasticsearch is meant to be consumed by
-client applications and in order to be performant those clients
-should communicate directly with Elasticsearch. This does mean that
-the metadata in Elasticsearch is not as current as the Metadata API.
-
-```
-$ pacifica-policy-cmd searchsync
-usage: pacifica-policy-cmd searchsync [-h] [--objects-per-page ITEMS_PER_PAGE]
-                                      [--threads THREADS]
-                                      [--time-ago TIME_AGO]
-
-sync sql data to elastic for search
-
-optional arguments:
-  -h, --help            show this help message and exit
-  --objects-per-page ITEMS_PER_PAGE
-                        objects per bulk upload.
-  --threads THREADS     number of threads to sync data
-  --time-ago TIME_AGO   only objects newer than X days ago.
-```
-
-Example command lines from the test suite.
-
-```
-pacifica-policy-cmd searchsync --objects-per-page=4 --threads=1 --time-ago='7 days ago' --exclude='keys._id=104'
-```

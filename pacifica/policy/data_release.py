@@ -4,7 +4,6 @@
 from __future__ import print_function
 from datetime import datetime
 from json import dumps
-from six import text_type
 import requests
 from dateutil import parser
 from .config import get_config
@@ -46,7 +45,7 @@ def relavent_data_release_objs(time_ago, orm_obj, exclude_list):
     }
     suspense_args.update(GLOBAL_GET_ARGS)
     resp = requests.get(
-        text_type('{base_url}/{orm_obj}').format(
+        '{base_url}/{orm_obj}'.format(
             base_url=get_config().get('metadata', 'endpoint_url'),
             orm_obj=orm_obj
         ),
@@ -56,10 +55,10 @@ def relavent_data_release_objs(time_ago, orm_obj, exclude_list):
         for proj_obj in resp.json():
             for rel_type in ['transsip', 'transsap']:
                 proj_id = proj_obj['_id']
-                if text_type(proj_id) in exclude_list:
+                if str(proj_id) in exclude_list:
                     continue
                 resp = requests.get(
-                    text_type('{base_url}/{rel_type}?project={proj_id}').format(
+                    '{base_url}/{rel_type}?project={proj_id}'.format(
                         rel_type=rel_type,
                         base_url=get_config().get('metadata', 'endpoint_url'),
                         proj_id=proj_id
@@ -69,7 +68,7 @@ def relavent_data_release_objs(time_ago, orm_obj, exclude_list):
                     trans_objs.add(trans_obj['_id'])
     else:
         for trans_obj in resp.json():
-            if text_type(trans_obj['_id']) not in exclude_list:
+            if str(trans_obj['_id']) not in exclude_list:
                 trans_objs.add(trans_obj['_id'])
     return trans_objs
 
@@ -86,7 +85,7 @@ def relavent_suspense_date_objs(time_ago, orm_obj, date_key):
         }
         obj_args.update(GLOBAL_GET_ARGS)
         resp = requests.get(
-            text_type('{base_url}/{orm_obj}').format(
+            '{base_url}/{orm_obj}'.format(
                 base_url=get_config().get('metadata', 'endpoint_url'),
                 orm_obj=orm_obj
             ),
@@ -100,7 +99,7 @@ def update_suspense_date_objs(objs, time_after, orm_obj):
     """update the list of objs given date_key adding time_after."""
     for obj_id, obj_date_key in objs.items():
         resp = requests.post(
-            text_type('{base_url}/{orm_obj}?_id={obj_id}').format(
+            '{base_url}/{orm_obj}?_id={obj_id}'.format(
                 base_url=get_config().get('metadata', 'endpoint_url'),
                 orm_obj=orm_obj,
                 obj_id=obj_id
@@ -124,9 +123,7 @@ def update_data_release(objs):
     rel_uuid = admin_policy.get_relationship_info(name='authorized_releaser')[0].get('uuid')
     for trans_id in objs:
         resp = requests.get(
-            text_type(
-                '{base_url}/transaction_user?transaction={trans_id}&relationship={rel_uuid}'
-            ).format(
+            '{base_url}/transaction_user?transaction={trans_id}&relationship={rel_uuid}'.format(
                 base_url=get_config().get('metadata', 'endpoint_url'),
                 trans_id=trans_id, rel_uuid=rel_uuid
             )
@@ -134,9 +131,7 @@ def update_data_release(objs):
         if resp.status_code == 200 and resp.json():
             continue
         resp = requests.put(
-            text_type(
-                '{base_url}/transaction_user'
-            ).format(
+            '{base_url}/transaction_user'.format(
                 base_url=get_config().get('metadata', 'endpoint_url')
             ),
             data=dumps({

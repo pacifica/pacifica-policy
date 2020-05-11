@@ -6,7 +6,6 @@ import logging
 from sys import argv as sys_argv
 from argparse import ArgumentParser
 from datetime import timedelta
-from six import text_type
 from .data_release import data_release, VALID_KEYWORDS
 
 logging.basicConfig()
@@ -31,7 +30,7 @@ def datarel_options(datarel_parser):
     datarel_parser.add_argument(
         '--exclude', dest='exclude',
         help='id of keyword prefix to exclude.',
-        nargs='*', default=set(), type=text_type
+        nargs='*', default=set(), type=str
     )
     datarel_parser.add_argument(
         '--keyword', dest='keyword', type=objstr_to_keyword,

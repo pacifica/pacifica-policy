@@ -6,4 +6,7 @@ pre-commit
 pylint>2
 pytest
 radon
+readthedocs-sphinx-ext
 recommonmark
+sphinx
+sphinx-rtd-theme
