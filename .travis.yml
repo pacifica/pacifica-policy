@@ -2,70 +2,70 @@ language: python
 dist: bionic
 python: 3.6
 stages:
-- lint
-- test
-- test-docker
-- deploy
+  - lint
+  - test
+  - test-docker
+  - deploy
 env:
   ADMIN_USER_ID: 10
   CACHE_SIZE: 0
 script:
-- pip install .
-- coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv tests
-- coverage report -m --fail-under 100
+  - coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv tests
+  - coverage report -m --fail-under 100
 before_script:
-- sudo mount -o remount,size=25% /var/ramfs
-- pip install ansible
-- ansible-galaxy install pacifica.ansible_pacifica pacifica.ansible_travis
-- ansible-playbook ~/.ansible/roles/pacifica.ansible_travis/molecule/common/playbook.yml -i ~/.ansible/roles/pacifica.ansible_travis/molecule/common/inventory.yml -e "ansible_python_interpreter=/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/bin/python travis_virtualenv=python${TRAVIS_PYTHON_VERSION} github_repository=policy"
-- pushd tests; python cherrypy_catch_test.py & echo $! > cherrypy-catch.pid; popd;
-- python tests/test_files/loadit_test.py;
+  - sudo mount -o remount,size=25% /var/ramfs
+  - pip install ansible
+  - ansible-galaxy install pacifica.ansible_pacifica pacifica.ansible_travis
+  - ansible-playbook ~/.ansible/roles/pacifica.ansible_travis/molecule/common/playbook.yml -i ~/.ansible/roles/pacifica.ansible_travis/molecule/common/inventory.yml -e "ansible_python_interpreter=/home/travis/virtualenv/python${TRAVIS_PYTHON_VERSION}/bin/python travis_virtualenv=python${TRAVIS_PYTHON_VERSION} github_repository=policy"
+  - pushd tests; python cherrypy_catch_test.py & echo $! > cherrypy-catch.pid; popd;
+  - python tests/test_files/loadit_test.py;
 jobs:
   include:
-  - stage: lint
-    before_script: skip
-    script: pre-commit run -a
-  - python: 3.7
-    before_script: skip
-    script: pre-commit run -a
-  - python: 3.8
-    before_script: skip
-    script: pre-commit run -a
-  - stage: test
-  - python: 3.7
-  - python: 3.8
-  - stage: test-docker
-    python: 3.8
-    sudo: required
-    before_script: skip
-    services:
-    - docker
-    script: >
-      docker-compose build --pull;
-      docker-compose up -d;
-      MAX_TRIES=60;
-      HTTP_CODE=$(docker-compose exec metadataserver curl -sL -w "%{http_code}\\n" localhost:8121/keys -o /dev/null || true);
-      while [[ $HTTP_CODE != 200 && $MAX_TRIES > 0 ]] ; do
-        sleep 1;
+    - stage: lint
+      before_script: skip
+      script: pre-commit run -a
+    - python: 3.7
+      before_script: skip
+      script: pre-commit run -a
+    - python: 3.8
+      before_script: skip
+      script: pre-commit run -a
+    - stage: test
+    - python: 3.7
+    - python: 3.8
+    - stage: test-docker
+      python: 3.8
+      sudo: required
+      before_script: skip
+      services:
+        - docker
+      script: >
+        docker-compose build --pull;
+        docker-compose up -d;
+        MAX_TRIES=60;
         HTTP_CODE=$(docker-compose exec metadataserver curl -sL -w "%{http_code}\\n" localhost:8121/keys -o /dev/null || true);
-        MAX_TRIES=$(( MAX_TRIES - 1 ));
-      done;
-      docker-compose exec metadataserver /bin/bash -c 'cd /usr/src/app/tests; python test_files/loadit_test.py';
-      curl http://127.0.0.1:8181/status/users/search/dmlb2001/simple;
-  - stage: deploy
-    language: python
-    python: 3.8
-    before_install: skip
-    before_script: skip
-    script: skip
-    deploy:
-      skip_cleanup: true
-      provider: pypi
-      user: dmlb2000
-      distributions: sdist bdist_wheel
-      password:
-        secure: bmMGOYjbmFy+7/ct2eRduWCvJUepK8KDEJ3eG2XmHN6Cr2/ou9o0AOnO+ux7pMAvNEW/X5UcAHM4CrB2rNYmnsIShHDfdKLmSgdSawOyaLpdrAoecoOygCBOcJrHfqERU1iYpRVlx2jgLbXRn6+S87nj8hothtdTrdwEOnoUsb5A02LMmq1a7/zD2klHlqNtW90IRHJzzVSA+ME/JcpKGxwugBSLlSaTgC7CvDePQrZg/4udEFUXPCRVDtwJ7wt1AVVp0xoMuvlRDek+32ZD+dqIJWpS7Q3aYCmj+oGrKMA8c4ESofg0CB71AQx5WSjJgZFKe/+jzyHzleteyJuNOlZWQO2iPy3eKfFi22lmRbyLXMoNJmyqHoLRzncIJsZoF3nEENUFiIuK2HkoP1FR1XcrP8DMUiw4CRkYT8qXzxfvutRnccaqjmybbJi/oRZs5A8zrMHF+eWWQugvzvvqDtVuDGvzl5ruqs9Esc+pX7i4I1uUEHfi39I3FGrjM7MoluvmUfJV/0204e86OkCmexqUn/NH1ZUsd42uCDe9ilpGWsnjYT20WAqwZpIxryb6daeGYoVcdp/HnSYxGMRZ6uB9/Fgr1s80G7i1QJ7YYsBlJZxbFRVz6yyUlHnYVp3yLqkTJjXoxUxa4SBZ9B1a4N9Tb7LHrqB1fPQqFggm3bc=
-      on:
-        tags: true
+        while [[ $HTTP_CODE != 200 && $MAX_TRIES > 0 ]] ; do
+          sleep 1;
+          HTTP_CODE=$(docker-compose exec metadataserver curl -sL -w "%{http_code}\\n" localhost:8121/keys -o /dev/null || true);
+          MAX_TRIES=$(( MAX_TRIES - 1 ));
+        done;
+        docker-compose exec metadataserver /bin/bash -c 'cd /usr/src/app/tests; python test_files/loadit_test.py';
+        curl http://127.0.0.1:8181/status/users/search/dmlb2001/simple;
+    - stage: deploy
+      language: python
+      python: 3.8
+      before_install: skip
+      before_script: skip
+      script: skip
+      deploy:
+        skip_cleanup: true
+        provider: pypi
+        user: dmlb2000
+        distributions: sdist bdist_wheel
+        password:
+          secure: bmMGOYjbmFy+7/ct2eRduWCvJUepK8KDEJ3eG2XmHN6Cr2/ou9o0AOnO+ux7pMAvNEW/X5UcAHM4CrB2rNYmnsIShHDfdKLmSgdSawOyaLpdrAoecoOygCBOcJrHfqERU1iYpRVlx2jgLbXRn6+S87nj8hothtdTrdwEOnoUsb5A02LMmq1a7/zD2klHlqNtW90IRHJzzVSA+ME/JcpKGxwugBSLlSaTgC7CvDePQrZg/4udEFUXPCRVDtwJ7wt1AVVp0xoMuvlRDek+32ZD+dqIJWpS7Q3aYCmj+oGrKMA8c4ESofg0CB71AQx5WSjJgZFKe/+jzyHzleteyJuNOlZWQO2iPy3eKfFi22lmRbyLXMoNJmyqHoLRzncIJsZoF3nEENUFiIuK2HkoP1FR1XcrP8DMUiw4CRkYT8qXzxfvutRnccaqjmybbJi/oRZs5A8zrMHF+eWWQugvzvvqDtVuDGvzl5ruqs9Esc+pX7i4I1uUEHfi39I3FGrjM7MoluvmUfJV/0204e86OkCmexqUn/NH1ZUsd42uCDe9ilpGWsnjYT20WAqwZpIxryb6daeGYoVcdp/HnSYxGMRZ6uB9/Fgr1s80G7i1QJ7YYsBlJZxbFRVz6yyUlHnYVp3yLqkTJjXoxUxa4SBZ9B1a4N9Tb7LHrqB1fPQqFggm3bc=
+        on:
+          tags: true
 install:
-- pip install -r requirements-dev.txt
+  - pip install -r requirements-dev.txt
+  - pip install .

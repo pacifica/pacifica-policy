@@ -3,7 +3,7 @@ pull_requests:
   do_not_increment_build_number: true
 
 services:
-- postgresql
+  - postgresql
 
 environment:
   PGUSER: postgres
@@ -23,39 +23,36 @@ environment:
 install:
 - ps: >
     & "$env:PYTHON\python.exe" -m virtualenv C:\pacifica;
-    Invoke-WebRequest -Uri "https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.6.14.zip" -OutFile "elasticsearch.zip";
-    Expand-Archive "elasticsearch.zip" -DestinationPath "C:\elasticsearch";
-    Start-Process C:\elasticsearch\elasticsearch-5.6.14\bin\elasticsearch;
     C:\pacifica\Scripts\activate.ps1;
     python -m pip install --upgrade pip setuptools wheel;
-    python -m pip install -r requirements-dev.txt;
+    pip install .;
+    pip install -r requirements-dev.txt;
     echo 'Done';
 
 build: off
 
 before_test:
-- ps: >
-    $env:PATH = "${env:PGSQL_PATH}\bin;${env:PYTHON}\Scripts;${env:PATH}";
-    createdb pacifica_metadata;
-    C:\pacifica\Scripts\activate.ps1;
-    $env:METADATA_CPCONFIG = "$PWD/travis/server.conf";
-    pacifica-metadata-cmd dbsync;
-    Start-Process C:\pacifica\Scripts\pacifica-metadata.exe -RedirectStandardError metadata-error.log -RedirectStandardOutput metadata-output.log;
-    $MD_VERSION = `pip show pacifica-metadata | grep Version: | awk '{ print $2 }';
-    Invoke-WebRequest https://github.com/pacifica/pacifica-metadata/archive/v${MD_VERSION}.zip -OutFile pacifica-metadata.zip;
-    Expand-Archive pacifica-metadata.zip -DestinationPath C:\pacifica-metadata;
-    pushd C:\pacifica-metadata\pacifica-metadata-${MD_VERSION};
-    sleep 10; Invoke-WebRequest http://localhost:8121/users;
-    python tests\test_files\loadit_test.py;
-    popd;
-    python tests\test_files\loadit_test.py;
-    Start-Process C:\pacifica\Scripts\python.exe -ArgumentList "tests\cherrypy_catch_test.py" -RedirectStandardError catch-error.log -RedirectStandardOutput catch-output.log;
+  - ps: >
+      $env:PATH = "${env:PGSQL_PATH}\bin;${env:PYTHON}\Scripts;${env:PATH}";
+      createdb pacifica_metadata;
+      C:\pacifica\Scripts\activate.ps1;
+      $env:METADATA_CPCONFIG = "$PWD/travis/server.conf";
+      pacifica-metadata-cmd dbsync;
+      Start-Process C:\pacifica\Scripts\pacifica-metadata.exe -RedirectStandardError metadata-error.log -RedirectStandardOutput metadata-output.log;
+      $MD_VERSION = `pip show pacifica-metadata | grep Version: | awk '{ print $2 }';
+      Invoke-WebRequest https://github.com/pacifica/pacifica-metadata/archive/v${MD_VERSION}.zip -OutFile pacifica-metadata.zip;
+      Expand-Archive pacifica-metadata.zip -DestinationPath C:\pacifica-metadata;
+      pushd C:\pacifica-metadata\pacifica-metadata-${MD_VERSION};
+      sleep 10; Invoke-WebRequest http://localhost:8121/users;
+      python tests\test_files\loadit_test.py;
+      popd;
+      python tests\test_files\loadit_test.py;
+      Start-Process C:\pacifica\Scripts\python.exe -ArgumentList "tests\cherrypy_catch_test.py" -RedirectStandardError catch-error.log -RedirectStandardOutput catch-output.log;
 
 
 test_script:
-- ps: >
-    mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
-    pre-commit run -a;
-    pip install .;
-    coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv tests;
-    coverage report -m --fail-under=100;
+  - ps: >
+      mkdir C:\tmp; C:\pacifica\Scripts\activate.ps1;
+      pre-commit run -a;
+      coverage run --include='*/site-packages/pacifica/policy/*' -m pytest -xsv tests;
+      coverage report -m --fail-under=100;
